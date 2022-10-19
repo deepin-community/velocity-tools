@@ -1,0 +1,41 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/pkg-info.mk
+
+export CLASSPATH=/usr/share/java/commons-beanutils.jar \
+                :/usr/share/java/commons-collections3.jar \
+                :/usr/share/java/commons-digester.jar \
+                :/usr/share/java/commons-lang.jar \
+                :/usr/share/java/commons-logging.jar \
+                :/usr/share/java/dom4j.jar \
+                :/usr/share/java/jsp-api-2.3.jar \
+                :/usr/share/java/servlet-api-3.1.jar \
+                :/usr/share/java/velocity.jar
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	dh_auto_build -- jar.view jar.generic javadoc -Dskip-download=true
+
+override_dh_install:
+	dh_install
+
+	# Generic JAR
+	mh_installpoms -plibvelocity-tools-java
+	mh_installjar  -plibvelocity-tools-java -l pom.xml dist/velocity-tools-view-$(DEB_VERSION_UPSTREAM).jar /usr/share/java/velocity-tools-view.jar
+
+	# View JAR
+	dh_link -plibvelocity-tools-java /usr/share/java/velocity-tools-view.jar /usr/share/maven-repo/velocity-tools/velocity-tools-view/debian/velocity-tools-view-debian.jar
+	dh_link -plibvelocity-tools-java /usr/share/java/velocity-tools-view.jar /usr/share/maven-repo/velocity-tools/velocity-tools-view/$(DEB_VERSION_UPSTREAM)/velocity-tools-view-$(DEB_VERSION_UPSTREAM).jar
+
+	dh_install -plibvelocity-tools-java-doc docs/javadoc/* usr/share/doc/libvelocity-tools-java/api
+
+override_dh_auto_clean:
+	dh_auto_clean
+	-rm -rf debian/tmp
+	mh_clean
+
+# Rename content directory to velocity-tools-X.Y in orig.tar.gz
+get-orig-source:
+	uscan --force-download --rename --repack

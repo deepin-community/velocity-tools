@@ -1,0 +1,5 @@
+01_dont_copy_test_lib.diff
+02_junit_45.diff
+03_servlet_api_compatibility.diff
+04_dom4j2_compatibility.diff
+CVE-2020-13959.patch

@@ -1,0 +1,3 @@
+org.apache.struts struts-* * * * *
+commons-chain commons-chain * * * *
+sslext sslext * * * *

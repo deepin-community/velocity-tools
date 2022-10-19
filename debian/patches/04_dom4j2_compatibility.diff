@@ -1,0 +1,14 @@
+Description: Fixes the compatibility with dom4j 2.x
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: no
+--- a/src/main/java/org/apache/velocity/tools/generic/XmlTool.java
++++ b/src/main/java/org/apache/velocity/tools/generic/XmlTool.java
+@@ -572,7 +572,7 @@
+         {
+             if (n instanceof Element)
+             {
+-                kids.addAll((List<Node>)((Element)n).elements());
++                kids.addAll((List)((Element)n).elements());
+             }
+         }
+         return new XmlTool(kids);
